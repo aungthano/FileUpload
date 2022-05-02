@@ -1,0 +1,11 @@
+ModuleCode
+	JobType
+		TrxType
+
+
+ShipmentType
+
+TaskType
+
+
+Max Memory -2147483647
