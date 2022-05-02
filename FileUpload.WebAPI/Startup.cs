@@ -1,3 +1,7 @@
+using AutoMapper;
+using FileUpload.Core.DBHelper;
+using FileUpload.Core.Services;
+using FileUpload.WebAPI.MapperProfiles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,7 +29,22 @@ namespace FileUpload.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Auto Mapper Configurations
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            //services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
+
+            string conStr = this.Configuration.GetConnectionString("DefaultConnection");
+            services.AddSingleton<DBManager>(new DBManager(conStr));
+
+            services.AddScoped<InvoiceTransService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
